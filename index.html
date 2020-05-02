@@ -22,6 +22,13 @@
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
+		<style>
+		mark { 
+  			background-color: red;
+  			color: black;
+		}
+</style>
+		</style>
 	</head>
 	<body>
 		<div class="reveal">
@@ -39,11 +46,155 @@
 					</textarea>
 				</section>
 				<section>
-					<h5>Introducción</h5>
-					<p class="fragment fade-up"></p>
+					<section>
+						<h5>Definición</h5>
+						<p class="fragment fade-up">En ingeniería del software, un patrón de diseño es una solución genérica a un problmema que ocurre con frecuencia en determinado con texto en el diseño de software</p>
+						<p class="fragment fade-up">No es un diseño finalizado que puede ser transformado directamente en código fuente</p>
+					</section>
+					<section>
+						<h5>Un poco de historia ...</h5>
+						<ul>
+							<li class="fragment fade-up">1977: Christopher Alexander introduce la idea de patrones: Soluciones exitosas a probleas (Pattern lenguage)</li>
+							<li class="fragment fade-up">1987: Ward Cunningham and Kent Beck aplican la idea de Alexander al contexto de un lenguaje orientado a Objetos</li>
+							<li class="fragment fade-up">1987: Disertación de Eric Gamma de la importancia de los patrones y como descubrirlos</li>
+						</ul>
+					</section>
+					<section>
+						<h5>Un poco más de historia ...</h5>
+						<ul>
+							<li class="fragment fade-up">1994: La publicación del libro "Design Pattern"</li>
+							<img class="fragment fade-up" src="https://upload.wikimedia.org/wikipedia/en/7/78/Design_Patterns_cover.jpg"/>
+							<p class="fragment fade-up">Eric Gamma, Richard Helm, Ralph Johnson, John Vlissides</p>
+                                                        <p class="fragment fade-up">Presentaron 23 patrones de diseño que en su mayoria continúan siendo de uso común</p>
+						</ul>
+					</section>
+	                              	<section>  
+                                                <h5>Un poco más de historia ...</h5>
+                                                <p class="fragment fade-up">"Gang of Four"</p>
+                                                <img class="fragment fade-up" src="https://qph.fs.quoracdn.net/main-qimg-46b7fbede853e8b9c47340e0302a3d03.webp">
+                                        </section>
+				</section>
+				<section>
+					<section>
+						<h5>Introducción</h5>
+						<p class="fragment fade-up">Es un tema importante en el desarrollo de software actual: permite capturar la experiencia</p>
+						<p class="fragment fade-up">Busca ayudar a la comunidad de desarrolladores de software a resolver problemas comunes, creando un lenguaje común para comunicar ideas y experiencia acerca de los problemas y sus soluciones</p>
+						<p class="fragment fade-up">El uso de patrones ayuda a obtener un software de calidad (reutilización y extensibilidad)</p>
+					</section>
+					<section>
+						<h5>Elementos de un patrón</h5>
+						<ul>
+							<li class="fragment fade-up"><b>Nombre:</b> describe el problema de diseño</li>
+							<li class="fragment fade-up"><b>El problema:</b> describe cuando aplicar el patrón</li>
+							<li class="fragment fade-up"><b>La solución:</b> describe los elementos que componen el diseño, sus relaciones, responsabilidades y colaboración</li>
+						</ul>
+					</section>
+					<section>
+						<h5>Clasificación [Gamma]</h5>
+						<table>
+							<thead>
+								<tr>
+									<th>Propósito / Ámbito</th>
+									<th>Creación</th>
+									<th>Estructural</th>
+									<th>Comportamiento</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th>Clase</th>
+									<td>Factory Method</td>
+									<td>Adapter</td>
+									<td>Interpreter Template Method</td>
+								</tr>
+								<tr>
+									<th>Objeto</th>
+									<td>Abstract Factory Builder Prototype Singleton
+									</td>
+									<td>Adapter Bridge Composite Decorator Facade Flyweight Proxy
+									</td>
+									<td>Chan of responsability Command Iterator Mediator Memento Observer State Strategy Visitor
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h5>Adapter</h5>
+						<p class="fragment fade-up">Su <i>INTENCIÓN</i> es convertir la interfaz de una clase en otra interfaz esperada por los clientes</p>
+						<p class="fragment fade-up"><i>Permite</i> que clases con interfaces incompatibles se comuniquen</p>
+					</section>
+					<section>
+						<h5>Adapter: Problema</h5>
+						<pre class="fragment fade-up">
+							<code class="hljs" data-trim>
+interface C {
+	void m1();
+}
+							</code>
+						</pre>
+						<pre class="fragment fade-up">
+                                        		<code class="hljs" data-trim>
+class A {
+	void ejecutar(C c) {
+		c.m1();
+	}
+}
+                                                        </code>
+						</pre>
+						<pre class="fragment fade-up">
+                                                        <code class="hljs" data-trim>
+class B {
+	void b1() {...}
+}
+                                                        </code>
+                                                </pre>  
+					</section>
+					<section>
+						<h5>Adapter: Problema</h5>
+						<p class="fragment fade-up">Se desea pasar por parámetro una instancia de B al método <i>ejecutar</i> de una instancia de la clase A</p>
+						<pre class="fragment fade-up">
+							<code data-trim data-noescape>
+							A a = new A();
+							B b = new B();
+							<mark>a.ejecutar(b);</mark>
+							</code>
+						</pre>
+						<p class="fragment fade-up"><b>NO se puede, B no implementa C</b></p>
+					</section>
+					<section>
+						<h5>Adapter: Solución</h5>
+                                                <pre class="fragment fade-up">
+							<code data-trim data-noescape>                
+							class AdapterB implements C {
+							   	B b;
+								AdapterB(B b) {
+									this.b = b;
+								}
+								void m1() {
+							   		this.b.b1();
+								}
+							}                                     
+                                                        </code>                                                                                                                          
+                                                </pre>                                                                                                                                   
+					</section>
+					<section>
+						<h5>Adapter: Solución</h5>
+                                                <p class="fragment fade-up">Ahora podemos pasar una instancia de B (dentro de un AdapterB) al método ejecutar de la clase A</p>
+						<pre class="fragment fade-up">
+							<code class="highlighting" data-trim data-noescape>
+							A a = new A();
+							B b = new B();
+							AdapterB adapterB = new AdapterB(b);
+							a.ejecutar(adapterB);
+							</code>
+						</pre>
+					</section>
 				</section>
 			</div>
-		</div>
+		</div>	
 
 		<script src="js/reveal.js"></script>
 
