@@ -193,11 +193,177 @@ class B {
 						</pre>
 					</section>
 				</section>
+				<section>
+					<section>
+						<h5>Decorator</h5>
+						<p class="fragment fade-up">La utilidad principal del patrón Decorator, es la de dotar de funcionalidades dinámicamente a objetos mediante composición</p>
+						<p class="fragment fade-up">Vamos a decorar los objetos para darles más funcionalidad de la que tienen en un principio</p>
+					</section>
+					<section>
+						<h5>Decorator</h5>
+						<p class="fragment fade-up">Esto es algo verdaderamente útil cuándo queremos evitar jerarquías de clases complejas</p>
+						<p class="fragment fade-up">La Herencia es una herramienta poderosa, pero puede hacer que nuestro diseño sea mucho menos extensible</p>
+					</section>
+					<section>
+						<h5>Decorator: Problema</h5>
+						<p class="fragment fade-up">Queremos poder calcular el costo de una computadora:</p>
+						<pre class="fragment fade-up">
+							<code data-trim data-noescape>
+							abstract class Computadora {
+								abstract float calcularCosto();
+							}
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h5>Decorator: Problema</h5>                                             
+                                                <p class="fragment fade-up">Inicialmente vamos a tener 3 tipos de computadoras:</p>            
+                                                <pre class="fragment fade-up">                                                                                                     
+                                                        <code data-trim data-noescape>
+							class ComputadoraStandard extends Computadora {
+								float procesador = 1000;
+								float sdd = 500;
+								float ram = 800;
+								
+								float calcularCosto() {
+									return procesador+sdd+ram;
+								}
+							}
+                                                        </code>
+                                                </pre>
+					</section>
+					<section>
+						<h5>Decorator: Problema</h5>
+						<pre class="fragment fade-up">                                                                                                     
+                                                        <code data-trim data-noescape>
+							class ComputadoraProgramador extends Computadora {
+								float procesador = 2000;
+								float sdd = 1500;
+								float ram = 2500;
+								float camara = 500;
+
+								float calcularCosto() {
+									return procesador+sdd+ram+camara;
+								}
+							}
+                                                        </code>
+                                                </pre>
+					</section>
+					<section>
+						<h5>Decorator: Problema</h5>
+						<pre class="fragment fade-up">                                                                                                     
+                                                        <code data-trim data-noescape>
+							class ComputadoraGamer extends Computadora {
+								float procesador = 3000;
+								float sdd = 500;
+								float ram = 2000;
+								float grafics = 2000;
+								float sonido = 1000;
+                                                                
+								float calcularCosto() {
+									return procesador+sdd+ram+graficos+sonido;
+								}
+							}
+                                                        </code>
+                                                </pre>
+					</section>
+					<section>
+						<p class="fragment fade-up">¿Que pasaría si quisiesemos permitir a los usuarios que puedar construir sus propios modelos agregando los componentes de su agrado a la computadora?</p>
+						<p class="fragment fade-up">Utilizando Herencia de esta forma tendríamos una explosión de clases, una para cada combinación de componentes posible para poder calcular el costo correspondiente</p>
+					</section>
+					<section>
+						<h5>Decorator: Solución</h5>
+						<pre class="fragment fade-up">
+							<code data-trim data-noescape>
+							abstract class ComputadoraDecorator extends Computadora {
+								Computadora unaComputadora;
+
+								ComputadoraDecorator(Computadora computadora) {
+									this.unaComputadora = computadora;
+								}
+
+								float calcularCosto() {
+									this.unaComputadora.calcularCosto() + costoExtra();
+								}
+
+								abstract float costoExtra();
+							}
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h5>Decorator: Solución</h5>
+						<pre class="fragment fade-up">
+							<code data-trim data-noescape>
+							class ProcesadorQuadCore extends ComputadoraDecorator {
+								float costoExtra() {
+									return 800;
+								}
+							}
+							</code>
+						</pre>
+						<pre class="fragment fade-up">
+							<code data-trim data-noescape>
+							class PlacaVideoGamer extends ComputadoraDecorator {
+								float costoExtra() {
+									return 3000;
+								}
+							}
+                                                        </code>
+                                                </pre>
+					</section>
+					<section>
+						<h5>Decorator: Solución</h5>
+                                                <pre class="fragment fade-up">
+                                                        <code data-trim data-noescape>
+                                                        class DiscoSDDRapido extends ComputadoraDecorator {
+                                                                float costoExtra() {
+                                                                        return 1500;
+                                                                }
+                                                        }
+                                                        </code>
+                                                </pre>
+                                                <pre class="fragment fade-up">
+                                                        <code data-trim data-noescape>
+                                                        class MemoriaRapida extends ComputadoraDecorator {
+                                                                float costoExtra() {
+                                                                        return 1000;
+                                                                }
+                                                        }
+                                                        </code>
+                                                </pre>
+                                        </section>
+					<section>
+                                                <h5>Decorator: Solución</h5>
+                                                <pre class="fragment fade-up">
+                                                        <code data-trim data-noescape>
+							class ComputadoraBase extends Computadora {
+								float calcularCosto() {
+									return 0;
+								}
+							}
+                                                        </code>
+                                                </pre>
+                                        </section>
+					<section>
+						<p class="fragment fade-up">De esta forma podemos ir calculando dinámicamente el costo de la computadoras sin necesidad de tener multiples subclases de Computadora</p>
+						<pre class="fragment fade-up">
+							<code data-trim data-noescape>
+								ComputadoraBase computadora = new ComputadoraBase();
+								computadora = new ProcesadorQuadCore(computadora);
+								computadora = new DiscoSDDRapido(computadora);
+								computadora = new MemoriaRapida(computadora);
+								computadora = new PlacaVideoGamer(computadora);
+							</code>
+						</pre>
+					</section>
+				</section>
 			</div>
 		</div>	
 
 		<script src="js/reveal.js"></script>
 
+		
 		<script>
 			// More info about config & dependencies:
 			// - https://github.com/hakimel/reveal.js#configuration
